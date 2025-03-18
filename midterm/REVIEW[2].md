@@ -64,15 +64,18 @@ Groups of parameters for a neural network. How to estimate the number of paramet
     - **Total Parameters** = **weights + biases**
 - **Example**:
     - A **Dense Layer** has **4 inputs** and **6 neurons**.
-$$
+
+$
 \text{Weights} = 4 \times 6 = 24
-$$
-$$
+$
+
+$
 \text{Biases} = 6
-$$
-$$
+$
+
+$
 \text{Total Parameters} = 24 + 6 = 30
-$$
+$
 
 ---
 
