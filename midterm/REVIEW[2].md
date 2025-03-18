@@ -271,12 +271,9 @@ The gradient is the vector of the derivatives. The gradient helps us to efficien
 - Compute the gradient (partial derivatives of the loss $w$.$r$.$t$. parameters).
 - Update parameters using following:
 
-   $
-   w = w - \eta \frac{\partial L}{\partial w}
-   $
-   $
-   b = b - \eta \frac{\partial L}{\partial b}
-   $
+   $w$ = $w$ - $\eta \frac{\partial L}{\partial w}$
+  
+   $b$ = $b$ - $\eta \frac{\partial L}{\partial b}$
 
    where **$\eta$** (learning rate) controls the step size.
 
@@ -289,11 +286,11 @@ Let's minimize $f(w) = (w - 3)^2$ using **gradient descent**.
 
 1. Compute the gradient.
 
-$\frac{d}{dw} (w - 3)^2 = 2(w - 3)$
+$\frac{d}{dw} (w - 3)^2$ = $2(w - 3)$
 
 2. Use update rule.
 
-$w = w - \eta \cdot 2(w - 3)$
+$w$ = $w$ - $\eta \cdot 2(w - 3)$
 
 3. Implement with python.
 
@@ -319,27 +316,23 @@ print(f"Final optimized weight: {w:.4f}")
 ### Example 2: Linear Regression using Gradient Descent
 Consider a simple linear regression model:
 
-$
-y = w x + b
-$
+$y$ = $w$ $x$ + $b$
 
 We aim to minimize **Mean Squared Error (MSE)**:
 
-$
-L = \frac{1}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)^2
-$
+$L$ = $\frac{1}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)^2$
 
 1. Compute the gradient:
 
-$\frac{\partial L}{\partial w} = -\frac{2}{N} \sum x_i (y_i - \hat{y}_i)$
+$\frac{\partial L}{\partial w}$ = $-\frac{2}{N} \sum x_i (y_i - \hat{y}_i)$
 
-$\frac{\partial L}{\partial b} = -\frac{2}{N} \sum (y_i - \hat{y}_i)$
+$\frac{\partial L}{\partial b}$ = $-\frac{2}{N} \sum (y_i - \hat{y}_i)$
 
 2. Update the weights.
 
-$w = w - \eta \frac{\partial L}{\partial w}$
+$w$ = $w$ - $\eta \frac{\partial L}{\partial w}$
 
-$b = b - \eta \frac{\partial L}{\partial b}$
+$b$ = $b$ - $\eta \frac{\partial L}{\partial b}$
 
 3. Implement in python:
 
