@@ -103,6 +103,7 @@ $$ReLU(-3) = \max(0, -3) = 0$$
 
 ### **Example**
 A **Dense Layer** has **4 inputs** and **6 neurons**.
+
 $$
 \text{Weights} = 4 \times 6 = 24
 $$
