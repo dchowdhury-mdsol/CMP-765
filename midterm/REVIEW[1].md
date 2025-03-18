@@ -66,9 +66,9 @@ Pretrained networks are models trained on large datasets and reused for specific
 
 | Function  | Formula | Purpose |
 |-----------|------------|------------|
-| **Sigmoid**  | \( \sigma(x) = \frac{1}{1+e^{-x}} \) | Used in probability-based outputs. |
-| **Tanh**  | \( \tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}} \) | Used in zero-centered activation. |
-| **ReLU**  | \( \max(0, x) \) | Prevents vanishing gradient. |
+| **Sigmoid**  | $\sigma(x) = \frac{1}{1+e^{-x}}$ | Used in probability-based outputs. |
+| **Tanh**  | $\tanh(x) = \frac{e^x - e^{-x}}{e^x + e^{-x}}$ | Used in zero-centered activation. |
+| **ReLU**  | $\max(0, x)$ | Prevents vanishing gradient. |
 
 **Example:**  
 If \( x = -3 \), what is ReLU(x)?  
@@ -97,8 +97,8 @@ $$ReLU(-3) = \max(0, -3) = 0$$
 - **Biases**: Help shift the activation.
 
 **Parameter Calculation**
-- **Number of Weights** = \( \text{inputs} \times \text{neurons} \)
-- **Number of Biases** = \( \text{neurons} \)
+- **Number of Weights** = $\text{inputs} \times \text{neurons}$
+- **Number of Biases** = $\text{neurons}$
 - **Total Parameters** = **weights + biases**
 
 ### **Example**
