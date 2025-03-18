@@ -82,12 +82,184 @@ $\text{MeanSquaredError} = \frac{1}{N} \sum_{i=1}^{N} (y_i - \hat{y}_i)^2$
 > - Has an output range of (−∞,∞).
 > - Excels with continous data types.
 
+```python
+# Example of MSE on a simple Linear regression
+# Import required PyTorch libraries
+import torch
+import torch.nn as nn  # PyTorch's module for neural networks
+import torch.optim as optim  # PyTorch's optimization library
+
+# ---------------------------- Model Definition ----------------------------
+# Define a simple Linear Regression model using nn.Module
+class LinearRegressionModel(nn.Module):
+    def __init__(self):
+        super().__init__()  # Initialize the parent class (nn.Module)
+        
+        # Define a single linear layer (fully connected)
+        # It maps 1 input feature to 1 output feature
+        self.linear = nn.Linear(in_features=1, out_features=1)  
+
+    def forward(self, x):
+        """
+        Defines how data flows through the model.
+        - Takes an input `x`, applies the linear transformation.
+        - Returns the predicted output.
+        """
+        return self.linear(x)  # Linear function y = Wx + b
+
+# ----------------------- DATA PREPARATION ------------------------
+
+# Creating training data: a simple linear relationship (y = 2x + 3)
+X_train = torch.tensor([[1.0], [2.0], [3.0], [4.0], [5.0]])  # Input values (independent variable)
+Y_train = torch.tensor([[5.0], [7.0], [9.0], [11.0], [13.0]])  # Target values (y = 2x + 3)
+
+# ----------------------- MODEL INITIALIZATION ------------------------
+
+# Instantiate the linear regression model
+model = LinearRegressionModel()
+
+# Define Mean Squared Error (MSE) as the loss function
+loss_fn = nn.MSELoss()
+
+# Define the optimizer: Stochastic Gradient Descent (SGD)
+optimizer = optim.SGD(model.parameters(), lr=0.01)
+# `model.parameters()` gives access to the weights (W) and bias (b) that the optimizer updates
+# `lr=0.01` is the learning rate, which controls the step size for weight updates
+
+# ----------------------- TRAINING LOOP ------------------------
+
+num_epochs = 1000  # Number of training iterations (epochs)
+
+for epoch in range(num_epochs):  # Loop through epochs
+
+    # **Forward Pass: Compute model predictions**
+    Y_pred = model(X_train)  # Model processes X_train and outputs predictions Y_pred
+    
+    # **Calculate Loss (How far is the prediction from the actual value?)**
+    loss = loss_fn(Y_pred, Y_train)  # MSE = (1/N) * Σ (y_actual - y_predicted)²
+
+    # **Zero out gradients from the previous step**
+    optimizer.zero_grad()  # This prevents accumulation of gradients from previous iterations
+    
+    # **Backpropagation: Compute gradients of loss w.r.t. model parameters**
+    loss.backward()  # Computes dL/dW and dL/db for updating model weights
+
+    # **Gradient Descent Step: Update model parameters using the optimizer**
+    optimizer.step()  # Adjusts weights W and bias b using computed gradients
+
+    # **Print loss every 100 epochs for progress tracking**
+    if epoch % 100 == 0:
+        print(f'Epoch {epoch}, Loss: {loss.item():.4f}')  
+        # `.item()` extracts the loss value from the tensor
+
+# ----------------------- MODEL TESTING ------------------------
+
+# Disable gradient tracking for evaluation (we don't need to compute gradients here)
+with torch.no_grad():  
+    test_input = torch.tensor([[6.0]])  # Test new input x = 6
+    predicted_output = model(test_input)  # Model generates prediction
+
+    # Print the predicted value for x=6
+    print(f"Predicted Output for x=6: {predicted_output.item():.4f}")  
+    # Expected output should be close to 15.0 (y = 2*6 + 3)
+```
+
 $\text{CrossEntropyLoss} = -\sum_{i=1}^{N} y_i \log(\hat{y}_i)$
 
 > - Used for classification problems. 
 > - Has an output range of (0, 1). 
 > - Excels with discrete class labels.
 
+```python
+# Example of CrossEntropy on a simple binary regression
+# Import required PyTorch modules
+import torch
+import torch.nn as nn  # Neural network module
+import torch.optim as optim  # Optimization module
+
+# ---------------------------- Model Definition ----------------------------
+class BinaryClassifier(nn.Module):
+    def __init__(self):
+        super().__init__()  # Initialize the parent class (nn.Module)
+        
+        # Define a single linear layer (fully connected)
+        # This model takes 1 input feature and produces 1 output (logit score)
+        self.linear = nn.Linear(1, 1)  # 1 input → 1 output
+
+    def forward(self, x):
+        """
+        Defines the forward pass of the model.
+        - Takes input `x`, applies the linear transformation.
+        - Returns raw logits (no activation function is applied).
+        """
+        return self.linear(x)  # Outputs logits (raw scores before activation)
+
+# ---------------------------- Data Preparation ----------------------------
+
+# Define input values (X_train)
+X_train = torch.tensor([[0.5], [1.0], [1.5], [2.0], [2.5], [3.0], [3.5]])
+
+# Define binary class labels (Y_train)
+# - Class 0 if x < 2
+# - Class 1 if x >= 2
+Y_train = torch.tensor([[0], [0], [0], [1], [1], [1], [1]])  # Binary labels (0 or 1)
+
+# ---------------------------- Model, Loss & Optimizer ----------------------------
+
+# Instantiate the model
+model = BinaryClassifier()
+
+# Define Binary Cross-Entropy Loss with logits (logits → probabilities inside the function)
+loss_fn = nn.BCEWithLogitsLoss()  
+
+# Define the optimizer (Stochastic Gradient Descent) with a learning rate of 0.1
+optimizer = optim.SGD(model.parameters(), lr=0.1)
+
+# ---------------------------- Training Loop ----------------------------
+
+num_epochs = 1000  # Number of training iterations (epochs)
+
+for epoch in range(num_epochs):  # Loop through each epoch
+    
+    # Forward Pass: Compute raw outputs (logits) before activation
+    Y_logits = model(X_train)  
+
+    # Compute Binary Cross-Entropy Loss
+    loss = loss_fn(Y_logits, Y_train.float())  
+    # Converts logits to probabilities using Sigmoid internally and applies BCE Loss:
+    # L = - (y log(σ(ŷ)) + (1-y) log(1 - σ(ŷ)))
+
+    # Zero out gradients from the previous step to prevent accumulation
+    optimizer.zero_grad()
+    
+    # Compute gradients via backpropagation (derivatives of loss w.r.t. weights)
+    loss.backward()
+    
+    # Update model parameters (weights and biases) using the computed gradients
+    optimizer.step()
+
+    #Print loss every 100 epochs to track progress
+    if epoch % 100 == 0:
+        print(f'Epoch {epoch}, Loss: {loss.item():.4f}')  # Extract loss value
+
+# ---------------------------- Model Evaluation (Testing) ----------------------------
+
+with torch.no_grad():  # Disable gradient computation during evaluation
+    test_inputs = torch.tensor([[1.2], [2.2], [3.2]])  # Test new values
+    
+    # Get raw model outputs (logits)
+    logits = model(test_inputs)  # Forward pass, output raw logits
+    
+    # Convert logits into probabilities using Sigmoid function
+    predictions = torch.sigmoid(logits)  # Convert logits to probability scores
+    
+    # Apply threshold (>= 0.5) to classify predictions as Class 0 or 1
+    predicted_classes = (predictions >= 0.5).float()  
+
+    # Print test results (input, raw logit, probability, predicted class)
+    for i, x in enumerate(test_inputs):
+        print(f"Input: {x.item()}, Logit: {logits[i].item():.4f}, Probability: {predictions[i].item():.4f}, Predicted Class: {int(predicted_classes[i].item())}")
+```
 ---
 
 ## Gradient Descent Algorithm
